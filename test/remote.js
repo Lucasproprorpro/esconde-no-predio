@@ -32,8 +32,11 @@ const at = (s, id) => { const p = SPOT[id]; s.emit('pos', { x: p.ex, y: p.y, z: 
   at(A, 'b_bed'); await wait(400); A.emit('check', { spotId: 'b_bed' });
   console.log('cama:', (await once(A, 'checked')).found ? 'achou' : 'vazio');
   await wait(1400); at(A, 'b_tub'); await wait(400);
+  const fnd = once(A, 'found');
   A.emit('check', { spotId: 'b_tub' });
-  console.log('achou:', (await once(A, 'found')).name, '| faltam', (await once(A, 'state', 5000, (x) => x.hidersLeft === 1)).hidersLeft);
+  const f = await fnd; await wait(400);
+  console.log('achou:', f.name, '| faltam', st.A.hidersLeft);
+  if (st.A.hidersLeft !== 1) throw new Error('contagem errada');
   await wait(1400); at(A, 'c_box'); await wait(400);
   const end = once(A, 'roundEnd'); A.emit('check', { spotId: 'c_box' });
   const e = await end; console.log('fim:', e.winner, e.reason, 'A ganhou?', e.youWon);
