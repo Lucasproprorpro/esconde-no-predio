@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a1014">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Esconde no Prédio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="game"></div>
+<div id="touch"></div>
+
+<div id="hideView"></div>
+<div id="blind"><div class="bt">Você procura!</div><div class="bc" id="blindCount">30</div><div class="bs">Tela escura enquanto o outro se esconde…</div></div>
+
+<div id="hud" class="hidden">
+  <div id="topbar">
+    <div id="score"><span class="me">Você <b id="sMe">0</b></span><span class="x">×</span><span class="op"><b id="sOp">0</b> Rival</span></div>
+    <div id="timer">--</div>
+  </div>
+  <div id="roleBadge"></div>
+  <div id="spotName"></div>
+  <div id="toast"></div>
+  <div id="waitBar" class="hidden">Sala <b id="waitCode">----</b> — esperando o outro jogador… <button id="btnShare">Compartilhar</button></div>
+</div>
+
+<div id="joyBase"><div id="joyKnob"></div></div>
+<button id="btnAction" class="hidden">Esconder</button>
+<button id="btnTaunt" class="hidden">Provocar<small>+½ ponto</small></button>
+
+<div id="menu">
+  <div class="card">
+    <h1>Esconde<br><span>no Prédio</span></h1>
+    <p class="sub">Esconde-esconde 3D para 2 jogadores</p>
+    <button id="btnCreate" class="big">Criar sala</button>
+    <div class="or">ou entre com o código</div>
+    <div class="row"><input id="codeIn" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off"><button id="btnJoin">Entrar</button></div>
+    <div id="menuMsg"></div>
+    <p class="tip">Dica: deite o celular e use fones 🎧</p>
+  </div>
+</div>
+
+<div id="endPanel" class="hidden"><div class="card"><h2 id="endTitle"></h2><p id="endText"></p><div id="endScore"></div><p class="sub">Próxima rodada já já — papéis invertidos!</p></div></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="spots.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>
