@@ -19,6 +19,8 @@ const io = new Server(server, { pingInterval: 10000, pingTimeout: 20000 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
 app.use('/vendor/three', express.static(path.join(__dirname, 'node_modules/three/build'), { maxAge: '7d' }));
 app.get('/health', (_req, res) => res.send('ok'));
+// verificação do app Android (abre em tela cheia, sem barra de endereço)
+app.get('/.well-known/assetlinks.json', (_req, res) => res.type('application/json').sendFile(path.join(__dirname, 'public/assetlinks.json')));
 
 const SPOT = Object.fromEntries(SPOTS.map((s) => [s.id, s]));
 const SEEKER_SPAWN = { x: 8.0, y: 0, z: 8.8, ry: Math.PI / 2 };
