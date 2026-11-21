@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.onrender.esconde_no_predio.twa",
+        "sha256_cert_fingerprints": ["52:D6:29:9D:F1:0E:27:DC:36:53:A2:3F:BE:A7:27:7D:11:FA:9F:1D:C2:7B:D7:D7:CD:F5:7A:4A:4B:FE:21:8C"]
+      }
+    }]
