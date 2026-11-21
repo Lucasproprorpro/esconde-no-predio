@@ -1,0 +1,42 @@
+// Teste rápido contra o servidor publicado (tempos reais): node test/remote.js <url>
+const { io } = require('socket.io-client');
+const SPOTS = require('../public/spots.js');
+const SPOT = Object.fromEntries(SPOTS.map((s) => [s.id, s]));
+const URL = process.argv[2];
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const once = (s, ev, ms = 45000, pred = () => true) => new Promise((res, rej) => {
+  const t = setTimeout(() => rej(new Error('timeout ' + ev)), ms);
+  const f = (d) => { if (!pred(d)) return; clearTimeout(t); s.off(ev, f); res(d); };
+  s.on(ev, f);
+});
+const at = (s, id) => { const p = SPOT[id]; s.emit('pos', { x: p.ex, y: p.y, z: p.ez, ry: 0 }); };
+(async () => {
+  const A = io(URL, { forceNew: true }), B = io(URL, { forceNew: true }), C = io(URL, { forceNew: true });
+  const st = {}; for (const [k, s] of [['A', A], ['B', B], ['C', C]]) s.on('state', (x) => (st[k] = x));
+  await Promise.all([once(A, 'connect'), once(B, 'connect'), once(C, 'connect')]);
+  console.log('conectados (transporte:', A.io.engine.transport.name + ')');
+  const code = await new Promise((r) => A.emit('create', { pid: 'ra' + Date.now(), name: 'TesteA' }, (x) => r(x.code)));
+  console.log('sala', code);
+  await new Promise((r) => B.emit('join', { pid: 'rb' + Date.now(), code, name: 'TesteB' }, r));
+  await new Promise((r) => C.emit('join', { pid: 'rc' + Date.now(), code, name: 'TesteC' }, r));
+  await wait(300);
+  console.log('jogadores na sala:', st.A.players.length);
+  const rs = once(A, 'roundStart'); A.emit('start');
+  console.log('rodada 1, A:', (await rs).role);
+  at(B, 'b_tub'); at(C, 'c_box'); await wait(400);
+  B.emit('hide', { spotId: 'b_tub' }); C.emit('hide', { spotId: 'c_box' }); await wait(800);
+  console.log('B em:', st.B.mySpot, '| C em:', st.C.mySpot);
+  await once(A, 'phase');
+  console.log('busca começou (4 min)');
+  B.emit('taunt'); await once(A, 'taunt'); console.log('A ouviu provocação');
+  at(A, 'b_bed'); await wait(400); A.emit('check', { spotId: 'b_bed' });
+  console.log('cama:', (await once(A, 'checked')).found ? 'achou' : 'vazio');
+  await wait(1400); at(A, 'b_tub'); await wait(400);
+  A.emit('check', { spotId: 'b_tub' });
+  console.log('achou:', (await once(A, 'found')).name, '| faltam', (await once(A, 'state', 5000, (x) => x.hidersLeft === 1)).hidersLeft);
+  await wait(1400); at(A, 'c_box'); await wait(400);
+  const end = once(A, 'roundEnd'); A.emit('check', { spotId: 'c_box' });
+  const e = await end; console.log('fim:', e.winner, e.reason, 'A ganhou?', e.youWon);
+  const r2 = await once(B, 'roundStart', 20000); console.log('rodada 2, B agora:', r2.role);
+  console.log('OK REMOTO ✅'); process.exit(0);
+})().catch((e) => { console.error('FALHOU', e.message); process.exit(1); });
