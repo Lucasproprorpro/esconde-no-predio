@@ -1,0 +1,19 @@
+{
+  "name": "esconde-no-predio",
+  "version": "1.0.0",
+  "description": "Esconde-esconde 3D multiplayer para 2 jogadores no celular",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/sim.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "socket.io": "4.8.1",
+    "socket.io-client": "4.8.1",
+    "three": "0.170.0"
+  }
+}
