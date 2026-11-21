@@ -11,20 +11,23 @@
 </head>
 <body>
 <div id="game"></div>
+<div id="vignette"></div>
 <div id="touch"></div>
 
 <div id="hideView"></div>
-<div id="blind"><div class="bt">Você procura!</div><div class="bc" id="blindCount">30</div><div class="bs">Tela escura enquanto o outro se esconde…</div></div>
+<div id="blind"><div class="bt">Você procura!</div><div class="bc" id="blindCount">30</div><div class="bs">Olhos fechados enquanto todo mundo se esconde… 🙈<br>Depois você tem 4 minutos para achar todos.</div></div>
 
 <div id="hud" class="hidden">
   <div id="topbar">
-    <div id="score"><span class="me">Você <b id="sMe">0</b></span><span class="x">×</span><span class="op"><b id="sOp">0</b> Rival</span></div>
     <div id="timer">--</div>
+    <div id="count"></div>
   </div>
+  <div id="side"><button id="btnBoard" title="Placar">🏆</button><div id="board"></div></div>
+  <div id="corner"><button id="btnLeave" title="Sair da sala">✕</button><button id="btnMute" title="Som">🔊</button></div>
   <div id="roleBadge"></div>
   <div id="spotName"></div>
   <div id="toast"></div>
-  <div id="waitBar" class="hidden">Sala <b id="waitCode">----</b> — esperando o outro jogador… <button id="btnShare">Compartilhar</button></div>
+  <div id="waitBar" class="hidden"><div>Sala <b id="waitCode">----</b> · <span id="waitN">1/7</span> <button id="btnShare">Convidar</button><button id="btnStart" class="hidden">Começar ▶</button></div><small id="waitMsg"></small></div>
 </div>
 
 <div id="joyBase"><div id="joyKnob"></div></div>
@@ -34,16 +37,21 @@
 <div id="menu">
   <div class="card">
     <h1>Esconde<br><span>no Prédio</span></h1>
-    <p class="sub">Esconde-esconde 3D para 2 jogadores</p>
+    <p class="sub">Esconde-esconde 3D de 2 a 7 pessoas num prédio aconchegante. Um procura, o resto se esconde!</p>
+    <div class="me-row">
+      <input id="nameIn" maxlength="14" placeholder="Seu nome" autocomplete="off">
+    </div>
+    <div id="swatches"></div>
     <button id="btnCreate" class="big">Criar sala</button>
-    <div class="or">ou entre com o código</div>
+    <p class="hint">Dá para treinar sozinho na sala enquanto os amigos não chegam.</p>
+    <div class="or">ou entre com o código do amigo</div>
     <div class="row"><input id="codeIn" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off"><button id="btnJoin">Entrar</button></div>
     <div id="menuMsg"></div>
-    <p class="tip">Dica: deite o celular e use fones 🎧</p>
+    <p class="tip">Deite o celular e use fones 🎧 · E/Espaço = ação no PC</p>
   </div>
 </div>
 
-<div id="endPanel" class="hidden"><div class="card"><h2 id="endTitle"></h2><p id="endText"></p><div id="endScore"></div><p class="sub">Próxima rodada já já — papéis invertidos!</p></div></div>
+<div id="endPanel" class="hidden"><div class="card"><h2 id="endTitle"></h2><p id="endText"></p><div id="endScore"></div><p class="sub">Próxima rodada já já — outra pessoa vai procurar!</p></div></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="spots.js"></script>
